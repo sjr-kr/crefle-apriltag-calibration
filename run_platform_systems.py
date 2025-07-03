@@ -72,7 +72,7 @@ while True:
     if ids is not None:
         cv2.aruco.drawDetectedMarkers(frame, corners, ids)
         
-        success, rel_coords, rvec_plat, tvec_plat = pl.define_platform_and_get_relative_coords(
+        success, rel_coords, rvec_obj_in_platform, rvec_plat, tvec_plat = pl.define_platform_and_get_relative_coords(
             corners, ids, mtx, dist, PLATFORM_CONFIG
         )
 
@@ -82,6 +82,11 @@ while True:
         if success:
             coord_text = f"Obj Coords (Platform Ref): X:{rel_coords[0]:.3f} Y:{rel_coords[1]:.3f} Z:{rel_coords[2]:.3f}"
             cv2.putText(frame, coord_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+            
+            # Display rotation vector if available
+            if rvec_obj_in_platform is not None:
+                rot_text = f"Obj Rot (Platform Ref): RX:{rvec_obj_in_platform[0][0]:.3f} RY:{rvec_obj_in_platform[1][0]:.3f} RZ:{rvec_obj_in_platform[2][0]:.3f}"
+                cv2.putText(frame, rot_text, (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
 
     cv2.imshow("플랫폼 좌표 테스트", frame)
 

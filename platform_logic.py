@@ -6,7 +6,7 @@ def define_platform_and_get_relative_coords(corners, ids, mtx, dist, platform_co
     platform_marker_ids = platform_config['platform_marker_ids']
     marker_length = platform_config['marker_length']
     object_marker_id = platform_config['object_marker_id']
-
+    
     detected_markers = {id[0]: corner for id, corner in zip(ids, corners)}
 
     rvec_platform_to_cam = None
@@ -48,11 +48,16 @@ def define_platform_and_get_relative_coords(corners, ids, mtx, dist, platform_co
         vec_platform_to_obj_in_cam = t_obj_in_cam - t_platform_in_cam
         t_obj_in_platform = R_cam_to_platform @ vec_platform_to_obj_in_cam
         
-        return True, t_obj_in_platform, rvec_platform_to_cam, tvec_platform_to_cam
+        # Calculate relative rotation
+        R_obj_to_cam, _ = cv2.Rodrigues(rvec_obj_to_cam[0][0])
+        R_platform_to_obj = R_cam_to_platform @ R_obj_to_cam
+        rvec_obj_in_platform, _ = cv2.Rodrigues(R_platform_to_obj)
+        
+        return True, t_obj_in_platform, rvec_obj_in_platform, rvec_platform_to_cam, tvec_platform_to_cam
     
     # 객체를 찾지 못했더라도, 플랫폼은 찾았으면 플랫폼 정보만 반환
     elif is_platform_found:
-        return False, None, rvec_platform_to_cam, tvec_platform_to_cam
+        return False, None, None, rvec_platform_to_cam, tvec_platform_to_cam
 
     # 아무것도 찾지 못했을 때
-    return False, None, None, None
+    return False, None, None, None, None
