@@ -1,58 +1,50 @@
+# Crefle AprilTag 캘리브레이션 및 추적
 
-# Crefle AprilTag Calibration and Tracking
+이 프로젝트는 AprilTag를 활용하여 카메라 캘리브레이션 및 실시간 3D 객체 추적을 위한 시스템을 제공합니다. 다중 마커 플랫폼을 사용하여 안정적인 기준 좌표계를 설정하고, 이 좌표계에 대한 객체의 3D 위치와 방향을 정밀하게 측정할 수 있습니다.
 
-This project provides a complete system for camera calibration, AprilTag generation, and real-time object tracking using a multi-marker platform setup. It allows you to define a stable reference frame and track the 3D coordinates of an object relative to it.
+## 주요 기능
 
-## Key Features
-
-- **Camera Calibration**: Captures checkerboard images and computes the camera matrix and distortion coefficients.
-- **AprilTag Generation**: Creates and saves AprilTag markers with specified IDs.
-- **Real-Time Detection**: Detects AprilTags in a live camera feed and estimates their poses.
-- **Platform-Relative Tracking**: Defines a platform using four AprilTag markers and calculates the 3D coordinates of an object marker relative to the platform.
+-   **카메라 캘리브레이션**: 체커보드 이미지를 캡처하여 카메라 매트릭스 및 왜곡 계수를 계산합니다.
+-   **AprilTag 생성**: 지정된 ID의 AprilTag 마커 이미지를 생성하고 저장합니다.
+-   **실시간 감지**: 라이브 카메라 피드에서 AprilTag를 감지하고 포즈를 추정합니다.
+-   **플랫폼 상대 추적**: 4개의 AprilTag 마커로 플랫폼을 정의하고, 이 플랫폼에 대한 객체 마커의 3D 좌표를 계산합니다.
 
 ---
 
-## File Descriptions
+## 파일 설명
 
-| File | Description |
+| 파일 | 설명 |
 | :--- | :--- |
-| `main.py` | The main entry point for running the camera calibration process. |
-| `camera_calibration.py` | Contains functions for capturing calibration images and computing camera parameters. |
-| `generate_multiple_markers.py` | Generates and saves AprilTag markers for the platform and objects. |
-| `run_apriltag_detector.py` | Detects all visible AprilTags and overlays their ID and distance from the camera. |
-| `run_platform_systems.py` | Establishes a coordinate system using a four-marker platform and tracks an object marker relative to it. |
-| `platform_logic.py` | Implements the core logic for defining the platform and calculating relative coordinates. |
+| `main.py` | 카메라 캘리브레이션 프로세스를 실행하는 주 진입점입니다. |
+| `camera_calibration.py` | 캘리브레이션 이미지 캡처 및 카메라 파라미터 계산 함수를 포함합니다. |
+| `generate_multiple_markers.py` | 플랫폼 및 객체용 AprilTag 마커를 생성하고 저장합니다. |
+| `run_apriltag_detector.py` | 모든 가시 AprilTag를 감지하고 ID 및 카메라로부터의 거리를 오버레이하여 표시합니다. |
+| `run_platform_systems.py` | 4개 마커 플랫폼을 사용하여 좌표계를 설정하고, 객체 마커를 플랫폼에 대해 추적합니다. |
+| `platform_logic.py` | 플랫폼 정의 및 상대 좌표 계산을 위한 핵심 로직을 구현합니다. |
 
 ---
 
-## Workflow
+## 워크플로우
 
-### Step 1: Generate AprilTag Markers
+### 1단계: AprilTag 마커 생성
 
-1.  Open `generate_multiple_markers.py`.
-2.  Modify the `IDS_TO_GENERATE` list to include the marker IDs you need for the platform (e.g., `[0, 1, 2, 3]`) and the object (e.g., `[10]`).
-3.  Run the script to save the markers as PNG files in the `generated_markers` directory.
+1.  `generate_multiple_markers.py`를 엽니다.
+2.  `IDS_TO_GENERATE` 목록을 플랫폼(예: `[0, 1, 2, 3]`) 및 객체(예: `[10]`)에 필요한 마커 ID로 수정합니다.
+3.  스크립트를 실행하여 `generated_markers` 디렉토리에 마커를 PNG 파일로 저장합니다.
 
-### Step 2: Calibrate the Camera
+### 2단계: 카메라 캘리브레이션
 
-1.  Run `main.py`.
-2.  Follow the on-screen prompts to configure the calibration settings:
-    - **Camera Index**: `0` for built-in, `1` for external.
-    - **Checkerboard Corners**: The number of internal corners (e.g., 6x9).
-    - **Square Size**: The side length of a checkerboard square in meters.
-3.  Capture at least 15-20 images of the checkerboard from different angles.
-4.  The script will save the calibration data to `test-params/calibration_data.npz`.
+1.  `main.py`를 실행합니다.
+2.  화면의 지시에 따라 캘리브레이션 설정을 구성합니다:
+    -   **카메라 인덱스**: 내장 카메라는 `0`, 외부 카메라는 `1` 등.
+    -   **체커보드 코너**: 내부 코너의 개수(예: 6x9).
+    -   **사각형 크기**: 체커보드 사각형의 한 변 길이(미터 단위).
+3.  다양한 각도에서 체커보드 이미지를 최소 15-20장 캡처합니다.
+4.  스크립트는 캘리브레이션 데이터를 `test-params/calibration_data.npz`에 저장합니다.
 
-### Step 3: Run the Platform System
+### 3단계: 플랫폼 시스템 실행
 
-1.  Arrange the four platform markers (IDs 0, 1, 2, 3) in a square, as shown in the diagram in `run_platform_systems.py`.
-2.  Run `run_platform_systems.py`.
-3.  Enter the marker and platform side lengths when prompted.
-4.  The system will detect the platform and track the object marker (ID 10), displaying its coordinates relative to the platform's center.
-
----
-
-## Configuration
-
-- **`platform_logic.py`**: The core logic for coordinate transformation is defined here. You can modify the `define_platform_and_get_relative_coords` function to adjust how the platform is defined or how relative coordinates are calculated.
-- **`run_platform_systems.py`**: This file contains the main configuration for the platform system, including marker IDs, marker layout, and 3D positions. You can change `PLATFORM_MARKER_IDS` and `OBJECT_MARKER_ID` to match your setup.
+1.  `run_platform_systems.py`의 다이어그램에 표시된 대로 4개의 플랫폼 마커(ID 0, 1, 2, 3)를 사각형으로 배치합니다.
+2.  `run_platform_systems.py`를 실행합니다.
+3.  프롬프트에 따라 마커 및 플랫폼의 한 변 길이를 입력합니다.
+4.  시스템은 플랫폼을 감지하고 객체 마커(ID 10)를 추적하여 플랫폼의 중심에 대한 상대 좌표를 표시합니다.
