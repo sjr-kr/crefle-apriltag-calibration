@@ -76,6 +76,7 @@ while True:
             corners, ids, mtx, dist, PLATFORM_CONFIG
         )
 
+        # rotation vector가 있음 -> 각도 return
         if rvec_plat is not None:
             cv2.drawFrameAxes(frame, mtx, dist, rvec_plat, tvec_plat, 0.1)
 

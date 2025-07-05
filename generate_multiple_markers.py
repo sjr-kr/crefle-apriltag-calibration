@@ -2,16 +2,14 @@ import cv2
 import numpy as np
 import os
 
-# --- 설정값 ---
 # 한 번에 생성할 마커 ID 목록
 IDS_TO_GENERATE = [10]
 
-# 이미지 크기 (픽셀 단위)
+# 이미지 크기 (픽셀 단위) -> 나중에 input으로 받아도 될듯
 PIXEL_SIZE = 400
 
 # 저장할 디렉토리
 OUTPUT_DIR = "generated_markers"
-# --------------
 
 # 사용할 AprilTag 사전 정의 (Tag36h11)
 aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_APRILTAG_36h11)

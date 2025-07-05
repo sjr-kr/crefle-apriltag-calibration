@@ -23,6 +23,7 @@ print(f"  - Marker Length: {MARKER_LENGTH_M} m")
 aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_APRILTAG_36h11)
 params = cv2.aruco.DetectorParameters()
 
+# 1: 아이폰 카메라, 2: 외장 카메라
 cap = cv2.VideoCapture(CAMERA_INDEX)
 if not cap.isOpened():
     print(f"Error: Camera index {CAMERA_INDEX} cannot be opened.")
