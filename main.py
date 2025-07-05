@@ -4,7 +4,7 @@ import os
 def main():
     print("--- Camera Calibration Setup ---")
     
-    img_path = "/Users/sungjaerhee/Desktop/crefle-apriltag-calibration/test-images"
+    img_path = "/Users/sungjaerhee/Desktop/crefle-apriltag-calibration/checkerboards"
     output_file = "test-params/calibration_data.npz"
     
     camera_index = int(input("Enter camera index (e.g., 0 for built-in, 1 for external): "))

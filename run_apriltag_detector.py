@@ -53,7 +53,7 @@ while True:
             coord_text = f"ID: {ids[i][0]} Z: {tvec[2]:.3f} m"
             corner_point = corners[i][0][0]
             text_pos = (int(corner_point[0]), int(corner_point[1] - 15))
-            cv2.putText(frame, coord_text, text_pos, cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+            cv2.putText(frame, coord_text, text_pos, cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 2)
 
     # 카메라 Real-Time 디스플레이
     cv2.imshow('AprilTag Detector', frame)
