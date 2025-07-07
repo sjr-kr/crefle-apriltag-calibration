@@ -4,8 +4,12 @@ import os
 def main():
     print("--- Camera Calibration Setup ---")
     
-    img_path = "/Users/sungjaerhee/Desktop/crefle-apriltag-calibration/test-images"
-    output_file = "test-params/calibration_data.npz"
+    # Get the absolute path of the directory where the script is located
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # Define paths relative to the script's location
+    img_path = os.path.join(script_dir, "test-images")
+    output_file = os.path.join(script_dir, "test-params", "calibration_data.npz")
     
     camera_index = int(input("Enter camera index (e.g., 0 for built-in, 1 for external): "))
     rows = int(input("Enter checkerboard internal corner rows (e.g., 6): "))

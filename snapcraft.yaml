@@ -1,0 +1,27 @@
+name: crefle-apriltag-calibration
+base: core22
+version: '0.1'
+summary: A calibration tool using AprilTags.
+description: |
+  This is the description of my application.
+  
+# Defines the application's security policy.
+grade: stable 
+confinement: strict
+
+# This section tells Snapcraft HOW to build your app.
+parts:
+  my-app-part:
+    plugin: node
+    source: .
+    # Tell the plugin which Node.js version to use.
+    node-engine: '18' 
+
+# This section tells Snapcraft WHAT command to run.
+apps:
+  crefle-apriltag-calibration:
+    command: npm start
+    # These plugs allow the app to use the network.
+    plugs:
+      - network
+      - network-bind

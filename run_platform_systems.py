@@ -53,12 +53,20 @@ PLATFORM_CONFIG = {
 aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_APRILTAG_36h11)
 params = cv2.aruco.DetectorParameters()
 
-cap = cv2.VideoCapture(CAMERA_INDEX)
+cap = cv2.VideoCapture(CAMERA_INDEX, cv2.CAP_V4L2)
 if not cap.isOpened():
     print(f"Error: Camera index {CAMERA_INDEX} cannot be opened.")
     exit()
 
+# Set camera resolution
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+
+# Create a resizable window
+cv2.namedWindow("플랫폼 좌표 테스트", cv2.WINDOW_NORMAL)
+
 print("\nStarting platform system... Press 'Q' to quit.")
+
 
 while True:
     ret, frame = cap.read()
