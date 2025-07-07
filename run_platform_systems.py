@@ -17,8 +17,10 @@ with np.load(CALIB_DATA_PATH) as data:
     CAMERA_INDEX = int(data['camera_index'])
 
 print("--- System Configuration ---")
-marker_length = float(input("Enter the marker side length in meters (e.g., 0.04 for 4cm): "))
-platform_size = float(input("Enter the platform side length in meters (e.g., 0.2 for 20cm): "))
+marker_length_mm = float(input("Enter the marker side length in millimeters (e.g., 40 for 40mm): "))
+platform_size_mm = float(input("Enter the platform side length in millimeters (e.g., 200 for 200mm): "))
+marker_length = marker_length_mm / 1000.0
+platform_size = platform_size_mm / 1000.0
 
 PLATFORM_MARKER_IDS = [0, 1, 2, 3] 
 OBJECT_MARKER_ID = 10 
@@ -88,7 +90,7 @@ while True:
             cv2.drawFrameAxes(frame, mtx, dist, rvec_plat, tvec_plat, 0.1)
 
         if success:
-            coord_text = f"Obj Coords (Platform Ref): X:{rel_coords[0]:.3f} Y:{rel_coords[1]:.3f} Z:{rel_coords[2]:.3f}"
+            coord_text = f"Obj Coords (Platform Ref): X:{rel_coords[0] * 1000:.4f} Y:{rel_coords[1] * 1000:.4f} Z:{rel_coords[2] * 1000:.4f} mm"
             cv2.putText(frame, coord_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
             
             # Display rotation vector if available

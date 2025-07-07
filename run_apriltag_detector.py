@@ -49,7 +49,7 @@ while True:
             
             cv2.aruco.drawDetectedMarkers(frame, corners)
             tvec = tvecs[i][0]
-            coord_text = f"ID: {ids[i][0]} Z: {tvec[2]:.3f} m"
+            coord_text = f"ID: {ids[i][0]} Z: {tvec[2] * 1000:.4f} mm"
             corner_point = corners[i][0][0]
             text_pos = (int(corner_point[0]), int(corner_point[1] - 15))
             cv2.putText(frame, coord_text, text_pos, cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)

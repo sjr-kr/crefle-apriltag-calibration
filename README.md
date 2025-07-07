@@ -1,50 +1,88 @@
-# Crefle AprilTag 캘리브레이션 및 추적
+# AprilTag Calibration and Detection Suite
 
-이 프로젝트는 AprilTag를 활용하여 카메라 캘리브레이션 및 실시간 3D 객체 추적을 위한 시스템을 제공합니다. 다중 마커 플랫폼을 사용하여 안정적인 기준 좌표계를 설정하고, 이 좌표계에 대한 객체의 3D 위치와 방향을 정밀하게 측정할 수 있습니다.
+This project provides a suite of tools for generating AprilTags, calibrating a camera, and detecting AprilTags in images.
 
-## 주요 기능
+## Features
 
--   **카메라 캘리브레이션**: 체커보드 이미지를 캡처하여 카메라 매트릭스 및 왜곡 계수를 계산합니다.
--   **AprilTag 생성**: 지정된 ID의 AprilTag 마커 이미지를 생성하고 저장합니다.
--   **실시간 감지**: 라이브 카메라 피드에서 AprilTag를 감지하고 포즈를 추정합니다.
--   **플랫폼 상대 추적**: 4개의 AprilTag 마커로 플랫폼을 정의하고, 이 플랫폼에 대한 객체 마커의 3D 좌표를 계산합니다.
+*   **Generate AprilTags:** Create multiple AprilTag markers with specified IDs.
+*   **Camera Calibration:** Calibrate a camera using a set of captured images.
+*   **AprilTag Detection:** Detect AprilTags in images using the calibrated camera parameters.
+*   **Platform Logic:** Control platform systems based on AprilTag detection (stubbed).
 
----
+## Getting Started
 
-## 파일 설명
+### Prerequisites
 
-| 파일 | 설명 |
-| :--- | :--- |
-| `main.py` | 카메라 캘리브레이션 프로세스를 실행하는 주 진입점입니다. |
-| `camera_calibration.py` | 캘리브레이션 이미지 캡처 및 카메라 파라미터 계산 함수를 포함합니다. |
-| `generate_multiple_markers.py` | 플랫폼 및 객체용 AprilTag 마커를 생성하고 저장합니다. |
-| `run_apriltag_detector.py` | 모든 가시 AprilTag를 감지하고 ID 및 카메라로부터의 거리를 오버레이하여 표시합니다. |
-| `run_platform_systems.py` | 4개 마커 플랫폼을 사용하여 좌표계를 설정하고, 객체 마커를 플랫폼에 대해 추적합니다. |
-| `platform_logic.py` | 플랫폼 정의 및 상대 좌표 계산을 위한 핵심 로직을 구현합니다. |
+*   Python 3
+*   OpenCV
+*   NumPy
 
----
+### Installation
 
-## 워크플로우
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/your-username/crefle-apriltag-calibration.git
+    ```
+2.  Install the required Python packages:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-### 1단계: AprilTag 마커 생성
+## Usage
 
-1.  `generate_multiple_markers.py`를 엽니다.
-2.  `IDS_TO_GENERATE` 목록을 플랫폼(예: `[0, 1, 2, 3]`) 및 객체(예: `[10]`)에 필요한 마커 ID로 수정합니다.
-3.  스크립트를 실행하여 `generated_markers` 디렉토리에 마커를 PNG 파일로 저장합니다.
+### 1. Generate AprilTags
 
-### 2단계: 카메라 캘리브레이션
+To generate AprilTag markers, run the `generate_multiple_markers.py` script:
 
-1.  `main.py`를 실행합니다.
-2.  화면의 지시에 따라 캘리브레이션 설정을 구성합니다:
-    -   **카메라 인덱스**: 내장 카메라는 `0`, 외부 카메라는 `1` 등.
-    -   **체커보드 코너**: 내부 코너의 개수(예: 6x9).
-    -   **사각형 크기**: 체커보드 사각형의 한 변 길이(미터 단위).
-3.  다양한 각도에서 체커보드 이미지를 최소 15-20장 캡처합니다.
-4.  스크립트는 캘리브레이션 데이터를 `test-params/calibration_data.npz`에 저장합니다.
+```bash
+python generate_multiple_markers.py
+```
 
-### 3단계: 플랫폼 시스템 실행
+This will create a set of AprilTag markers in the `generated_markers` directory.
 
-1.  `run_platform_systems.py`의 다이어그램에 표시된 대로 4개의 플랫폼 마커(ID 0, 1, 2, 3)를 사각형으로 배치합니다.
-2.  `run_platform_systems.py`를 실행합니다.
-3.  프롬프트에 따라 마커 및 플랫폼의 한 변 길이를 입력합니다.
-4.  시스템은 플랫폼을 감지하고 객체 마커(ID 10)를 추적하여 플랫폼의 중심에 대한 상대 좌표를 표시합니다.
+### 2. Calibrate the Camera
+
+To calibrate the camera, you need a set of images of a checkerboard pattern. Place these images in the `test-images` directory. Then, run the `camera_calibration.py` script:
+
+```bash
+python camera_calibration.py
+```
+
+This will create a `calibration_data.npz` file in the `test-params` directory, which contains the camera matrix and distortion coefficients.
+
+### 3. Run the AprilTag Detector
+
+To detect AprilTags in an image, run the `run_apriltag_detector.py` script:
+
+```bash
+python run_apriltag_detector.py --image <path_to_image>
+```
+
+Replace `<path_to_image>` with the path to the image you want to process. The script will use the calibration data from `test-params/calibration_data.npz` to detect the AprilTags.
+
+### 4. Run the Platform Systems
+
+To run the platform systems, which include the AprilTag detector and platform logic, run the `run_platform_systems.py` script:
+
+```bash
+python run_platform_systems.py
+```
+
+This script will process the images in the `test-images` directory and print the detected AprilTags.
+
+## File Descriptions
+
+*   `main.py`: The main entry point for the application.
+*   `generate_multiple_markers.py`: Generates AprilTag markers.
+*   `camera_calibration.py`: Calibrates the camera.
+*   `run_apriltag_detector.py`: Detects AprilTags in an image.
+*   `run_platform_systems.py`: Runs the platform systems.
+*   `platform_logic.py`: Contains the platform logic.
+*   `requirements.txt`: The Python dependencies.
+*   `snapcraft.yaml`: The Snapcraft configuration file.
+*   `nodesource_setup.sh`: A script to set up Node.js.
+*   `.env`: The environment variables.
+*   `README.md`: This file.
+*   `generated_markers/`: The directory for the generated AprilTag markers.
+*   `test-images/`: The directory for the test images.
+*   `test-params/`: The directory for the calibration data.
